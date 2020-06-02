@@ -5,12 +5,12 @@
 This project connects the Neos Content Repository to Elasticsearch; enabling two
 main functionalities:
 
-* finding Nodes in Fusion / Eel by arbitrary queries
-* Full-Text Indexing of Pages and other Documents (of course including the full content)
+* Finding Nodes in Fusion / Eel by arbitrary queries
+* Full-text indexing of pages and other documents (of course including the full content)
 
 This documentation is structured in the following parts:
 
-* [Installation](#installation): Which packages are needed and how they are installed.
+* [Installation](#installation): Which packages are needed and how they are installed
 * [Commands](#commands): This section describes the available ./flow CLI commands
 * [Configuration](#configuration): Configuration of indices, fields, ...
 * [Query Data](#query-data): Available Eel operations to query data
@@ -20,7 +20,7 @@ This documentation is structured in the following parts:
 
 ```
 composer require 'flowpack/elasticsearch-contentrepositoryadaptor'
-// Not required, but can be used to learn how to integration the flowpack/elasticsearch-contentrepositoryadaptor in your project
+// Not required, but can be used to learn how to integrate the flowpack/elasticsearch-contentrepositoryadaptor in your project
 composer require 'flowpack/searchplugin'
 ```
 Ensure to update `<your-elasticsearch>/config/elasticsearch.yml` as explained below; then start Elasticsearch.
@@ -29,11 +29,11 @@ Finally, run `./flow nodeindex:build`, and add the search plugin to your page. I
 
 ## Relevant Packages
 
-* [Neos.ContentRepository.Search](https://www.neos.io/download-and-extend/packages/neos/neos-content-repository-search.html): provides common functionality for searching Neos Content Repository nodes. Does not contain a search backend.
-* [Flowpack.ElasticSearch](https://www.neos.io/download-and-extend/packages/flowpack/flowpack-elasticsearch.html): provides common code for working with Elasticsearch
-* [Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://www.neos.io/download-and-extend/packages/flowpack/flowpack-elasticsearch-contentrepositoryadaptor.html): this package
-* [Flowpack.SimpleSearch.ContentRepositoryAdaptor](https://www.neos.io/download-and-extend/packages/flowpack/flowpack-simplesearch-contentrepositoryadaptor.html): an alternative search backend (to be used instead of this package); storing the search index in SQLite
-* [Flowpack.SearchPlugin](https://www.neos.io/download-and-extend/packages/flowpack/flowpack-searchplugin.html): search plugin for Neos
+* [Neos.ContentRepository.Search](https://www.neos.io/download-and-extend/packages/neos/neos-content-repository-search.html): Provides common functionality for searching Neos Content Repository nodes. Does not contain a search backend.
+* [Flowpack.ElasticSearch](https://www.neos.io/download-and-extend/packages/flowpack/flowpack-elasticsearch.html): Provides common code for working with Elasticsearch.
+* [Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://www.neos.io/download-and-extend/packages/flowpack/flowpack-elasticsearch-contentrepositoryadaptor.html): This package.
+* [Flowpack.SimpleSearch.ContentRepositoryAdaptor](https://www.neos.io/download-and-extend/packages/flowpack/flowpack-simplesearch-contentrepositoryadaptor.html): An alternative search backend (to be used instead of this package); storing the search index in SQLite. Useful in case you don't have Elasticsearch available in your project.
+* [Flowpack.SearchPlugin](https://www.neos.io/download-and-extend/packages/flowpack/flowpack-searchplugin.html): Search plugin for Neos.
 
 ## Elasticseearch and Neos compatibility
 
@@ -42,7 +42,7 @@ This following matrix shows the compatibility of this package to Elasticsearch a
 |CR Adapter| Neos          | Elasticsearch | Status       |
 |----------|---------------|---------------|--------------|
 | 4        | 3.x, 4.x      | 1.x, 2,x 5.x  | Unmaintained, probably broken |
-| 5        | > 3.3, 4.x    | 1.x, 2,x 5.x  | Bugfix only  | 
+| 5        | 3.3, 4.x      | 1.x, 2,x 5.x  | Bugfix only  | 
 | 6        | 5.x           | 5.x           | Bugfix only  |
 | 7        | 5.x           | 6.x, 7.x      | Bugfix and Features |
 
@@ -82,7 +82,7 @@ if during development, you only want to index a few nodes, you can use "limit"
 
 ### Cleanup old indices
 
- In order to remove old, non-used indices, you should use this command from time to time:
+In order to remove old, non-used indices, you should use this command from time to time:
 
 	./flow nodeindex:cleanup
 
@@ -96,15 +96,15 @@ Shows the mapping between the projects dimensions presets and the resulting inde
 
 	./flow nodeindexmapping:mapping
 
-Shows the mapping created for the NodeTypes.
+Shows the mapping created for the node types.
 
-	./flow nodetype: showIndexableConfiguration
+	./flow nodetype:showIndexableConfiguration
 
-Shows a list of NodeTypes and if they are configured to be indexable
+Shows a list of NodeTypes and if they are configured to be indexable.
 
 	./flow search:viewnode <nodeIdentifier> [<dimensionCombinationAsJson>] [<field>]
 
-Shows all contents that are indexed fo a given node.
+Shows all contents that are indexed for a given node.
 
 	./flow search:fulltext
 
@@ -119,9 +119,9 @@ If you want to fine-tune the indexing and mapping on a more detailed level, you 
 
 ### Configure the index name
 
-If you need to run serveral (different) neos instances on the same elasticsearch server you will need to change the Configuration/Settings.yaml indexName for each of your project.
+If you need to run serveral (different) Neos instances on the same elasticsearch server you will need to change the Configuration/Settings.yaml indexName for each of your project.
 
-So `./flow nodeindex:build` or `./flow nodeindex:cleanup` won't overwrite your other sites index.
+As a consequence, `./flow nodeindex:build` or `./flow nodeindex:cleanup` won't overwrite your other sites' index.
 
 ```yaml
 Neos:
@@ -179,13 +179,13 @@ Flowpack:
                   filter: [ 'asciifolding', 'lowercase' ]
 ```
 
-Which dimension combinations are available in your system and which hashes they are identified with can be shown with the CLI command: 
+You can use the following command to show which dimension combinations are available in your system and which hashes they are identified by:
 
-	dflow nodeindexmapping:indices
+	./flow nodeindexmapping:indices
 
 ### Configurations per property (index field)
 
-Then, you can change the analyzers on a per-field level; or e.g. reconfigure the _all field with the following snippet
+You can change the analyzers on a per-field level; or e.g. reconfigure the _all field with the following snippet
 in the NodeTypes.yaml. Generally this works by defining the global mapping at `[nodeType].search.elasticSearchMapping`:
 
 ```yaml
@@ -216,7 +216,7 @@ Neos:
 ```
 
 You need to explicitly configure the individual NodeTypes (this feature does not check the Super Type configuration).
-But you  can use a special notation to configure a full namespace, `Acme.AcmeCom:*` will be applied for all node
+But you can use a special notation to configure a full namespace, e.g. `Acme.AcmeCom:*` will be applied for all node
 types in the `Acme.AcmeCom` namespace. The most specific configuration is used in this order: 
 
 - NodeType name (`Neos.Neos:Shortcut`)

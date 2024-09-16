@@ -292,7 +292,15 @@ class NodeIndexCommandController extends CommandController
             ]);
         };
 
-        $combinations = new ArrayCollection($this->contentDimensionCombinator->getAllAllowedCombinations());
+        # In CLI context, the lookup below returns the language dimension for the first site that doesn't have the French language
+        # It is unclear how to fix this properly
+        # Using the settings Neos.Neos.defaultSiteNodeName would work, but it has side effects for other sites in the BE
+        # @see https://redmine.visol.ch/issues/43017
+        $allAllowedCombinations = $this->contentDimensionCombinator->getAllAllowedCombinations();
+        $allAllowedCombinations[] = [
+            'language' => ['fr_CH']
+        ];
+        $combinations = new ArrayCollection($allAllowedCombinations);
 
         $runAndLog = function ($command, string $stepInfo) use ($combinations) {
             $timeStart = microtime(true);
@@ -516,7 +524,17 @@ class NodeIndexCommandController extends CommandController
     public function cleanupCommand(): void
     {
         $removed = false;
-        $combinations = $this->contentDimensionCombinator->getAllAllowedCombinations();
+        
+        # In CLI context, the lookup below returns the language dimension for the first site that doesn't have the French language
+        # It is unclear how to fix this properly
+        # Using the settings Neos.Neos.defaultSiteNodeName would work, but it has side effects for other sites in the BE
+        # @see https://redmine.visol.ch/issues/43017
+        $allAllowedCombinations = $this->contentDimensionCombinator->getAllAllowedCombinations();
+        $allAllowedCombinations[] = [
+            'language' => ['fr_CH']
+        ];
+        $combinations = new ArrayCollection($allAllowedCombinations);
+
         foreach ($combinations as $dimensionsValues) {
             try {
                 $this->nodeIndexer->setDimensions($dimensionsValues);
